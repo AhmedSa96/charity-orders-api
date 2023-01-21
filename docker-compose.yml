@@ -1,0 +1,31 @@
+version: '3.9'
+services:
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: dev
+    volumes:
+      - .:/app
+    ports:
+      - 3000:3000
+    environment:
+      NODE_ENV: development
+      PORT: 3000
+      DB_HOST: db
+      DB_PORT: 5432
+      DB_USER: ahmed
+      DB_PASSWORD: Ahmed1996;
+      DB_NAME: charity
+      JWT_SECRET: CO7*cpM$U999GfMT
+    depends_on:
+      - postgres  
+
+  postgres:
+    image: postgres:13.2
+    ports:
+      - 5432:5432
+    environment:
+      POSTGRES_USER: ahmed
+      POSTGRES_PASSWORD: Ahmed1996;
+      POSTGRES_DB: charity
