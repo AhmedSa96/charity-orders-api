@@ -1,3 +1,4 @@
+import { ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { AppModule } from './app.module';
@@ -7,6 +8,10 @@ async function bootstrap() {
 
   // set api prefix
   app.setGlobalPrefix('api');
+  
+  app.useGlobalPipes(new ValidationPipe({
+    transform: true,
+  }));
 
   const config = new DocumentBuilder()
     .setTitle('Charity Orders API')

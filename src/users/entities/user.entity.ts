@@ -1,4 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
+import { Exclude } from 'class-transformer';
 import {
   Column,
   CreateDateColumn,
@@ -39,6 +40,7 @@ export class User {
   @Column()
   phone: string;
 
+  @Exclude()
   @ApiProperty()
   @Column()
   password: string;
@@ -56,6 +58,7 @@ export class User {
   @UpdateDateColumn()
   updated_at: Date;
 
+  @Exclude()
   @ApiProperty()
   @DeleteDateColumn()
   deleted_at: Date;

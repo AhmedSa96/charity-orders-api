@@ -1,3 +1,4 @@
+import { FetchUsersFiltersDto } from './models/fetch-users-filters-dto';
 import { UserResource } from './models/user-resource';
 import { CreateUserDto } from './models/create-user-dto';
 import { User } from './entities/user.entity';
@@ -9,8 +10,8 @@ import { UsersRepository } from './users.repository';
 export class UsersService {
   constructor(private readonly usersRepository: UsersRepository) {}
 
-  findAll(): Observable<User[]> {
-    return from(this.usersRepository.findAll());
+  findAll(filters: FetchUsersFiltersDto): Observable<User[]> {
+    return from(this.usersRepository.findAll(filters));
   }
 
   create(user: CreateUserDto): Observable<User> {
