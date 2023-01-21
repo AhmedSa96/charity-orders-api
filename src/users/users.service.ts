@@ -5,12 +5,13 @@ import { User } from './entities/user.entity';
 import { from, map, Observable } from 'rxjs';
 import { Injectable } from '@nestjs/common';
 import { UsersRepository } from './users.repository';
+import { plainToClass } from 'class-transformer';
 
 @Injectable()
 export class UsersService {
   constructor(private readonly usersRepository: UsersRepository) {}
 
-  findAll(filters: FetchUsersFiltersDto): Observable<User[]> {
+  findAll(filters: FetchUsersFiltersDto): Observable<UserResource[]> {
     return from(this.usersRepository.findAll(filters));
   }
 

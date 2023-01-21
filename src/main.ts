@@ -17,7 +17,6 @@ async function bootstrap() {
     .setTitle('Charity Orders API')
     .setDescription('open source project for charity orders')
     .setVersion('1.0')
-    .addTag('charity orders')
     .build();
   
   const document = SwaggerModule.createDocument(app, config);

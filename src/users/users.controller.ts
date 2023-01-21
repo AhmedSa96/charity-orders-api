@@ -16,7 +16,7 @@ export class UsersController {
   @Get()
   findAll(
     @Query() filters: FetchUsersFiltersDto,
-  ): Observable<User[]> {
+  ): Observable<UserResource[]> {
     return this.usersService.findAll(filters);
   }
 

@@ -4,23 +4,24 @@ import { UserType } from "../entities/user.entity";
 
 export class UserResource {
     @ApiProperty()
-    public id: number;
+    id: number = 0;
 
     @ApiProperty()
-    firstName: string;
+    first_name: string = '';
 
     @ApiProperty()
-    lastName: string;
+    last_name: string = '';
 
     @ApiProperty()
-    email: string;
+    email: string = '';
 
     @ApiProperty()
-    userType: UserType;
+    user_type: UserType = UserType.BENEFICIARY;
 
     @ApiProperty()
-    createdAt: Date;
+    created_at: Date = new Date();
 
     @ApiProperty()
-    updatedAt: Date;
+    updated_at: Date = new Date();
+
 }
