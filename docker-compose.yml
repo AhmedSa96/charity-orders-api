@@ -12,11 +12,11 @@ services:
     environment:
       NODE_ENV: development
       PORT: 3000
-      DB_HOST: db
+      DB_HOST: postgres
       DB_PORT: 5432
-      DB_USER: ahmed
+      DB_USERNAME: ahmed
       DB_PASSWORD: Ahmed1996;
-      DB_NAME: charity
+      DB_DATABASE: charity
       JWT_SECRET: CO7*cpM$U999GfMT
     depends_on:
       - postgres  
