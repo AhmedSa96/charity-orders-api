@@ -6,13 +6,13 @@ import { UserType } from './../entities/user.entity';
 export class FetchUsersFiltersDto {
     
     @ApiProperty({ required: false, default: 1 })
-    @IsNumber()
+    @IsNumber({ allowNaN: false, allowInfinity: false }, { message: 'page must be a number' })
     @Type(() => Number)
     page: number = 1;
 
     @ApiProperty({ required: false, default: 10 })
+    @IsNumber({ allowNaN: false, allowInfinity: false }, { message: 'limit must be a number' })
     @Type(() => Number)
-    @IsNumber()
     limit: number = 10;
     
     @ApiProperty({ required: false, enum: UserType, default: UserType.BENEFICIARY })

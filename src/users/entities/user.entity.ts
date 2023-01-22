@@ -1,5 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Exclude } from 'class-transformer';
+import { IsEmail, IsNotEmpty, Matches } from 'class-validator';
 import {
   Column,
   CreateDateColumn,
@@ -8,7 +9,6 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
-import { UserResource } from '../models/user-resource';
 
 export enum UserType {
   ADMIN = 'admin',
@@ -26,27 +26,31 @@ export class User {
 
   @ApiProperty()
   @Column()
+  @IsNotEmpty()
   first_name: string;
 
   @ApiProperty()
   @Column()
+  @IsNotEmpty()
   last_name: string;
 
   @ApiProperty()
   @Column()
+  @IsNotEmpty()
+  @IsEmail()
   email: string;
 
   @ApiProperty()
   @Column()
-  phone: string;
+  phone?: string;
 
   @Exclude()
   @ApiProperty()
   @Column()
+  @IsNotEmpty()
   password: string;
 
   @ApiProperty()
-  // enum: UserType,
   @Column({ type: 'enum', enum: UserType, default: UserType.BENEFICIARY })
   user_type: UserType;
 
@@ -62,5 +66,4 @@ export class User {
   @ApiProperty()
   @DeleteDateColumn()
   deleted_at: Date;
-
 }
