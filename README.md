@@ -9,8 +9,9 @@ Charity Orders API is an open source api made using
 - postgres
 - openApi/Swagger
 - web socket
+- rate limit security
 
-optionaly we could add 
+maybe we could add 
 
 - js report
 - payment gateways
