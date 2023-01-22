@@ -17,6 +17,7 @@ async function bootstrap() {
     .setTitle('Charity Orders API')
     .setDescription('open source project for charity orders')
     .setVersion('1.0')
+    .addBearerAuth()
     .build();
   
   const document = SwaggerModule.createDocument(app, config);

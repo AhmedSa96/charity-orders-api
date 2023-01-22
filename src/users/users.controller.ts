@@ -1,18 +1,32 @@
+import { JwtAuthGuard } from './../auth/jwt-auth.guard';
 import { UpdateUserDto } from './models/update-user-dto';
 import { UserResource } from './models/user-resource';
 import { CreateUserDto } from './models/create-user-dto';
-import { Body, Controller, Delete, Get, Param, ParseIntPipe, Post, Put, Query } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, ParseIntPipe, Post, Put, Query, UseGuards } from '@nestjs/common';
 import { Observable } from 'rxjs';
 import { UsersService } from './users.service';
-import { ApiCreatedResponse, ApiNotFoundResponse, ApiOkResponse, ApiTags, ApiUnauthorizedResponse } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiCreatedResponse, ApiNotFoundResponse, ApiOkResponse, ApiTags, ApiUnauthorizedResponse } from '@nestjs/swagger';
 import { FetchUsersFiltersDto } from './models/fetch-users-filters-dto';
+import { LoginDto } from './models/login-dto';
+import { LoginResponse } from './models/login-response';
 
 @ApiTags('users')
 @Controller('users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
+  @Post('login')
+  @ApiOkResponse({ type: LoginResponse })
+  @ApiNotFoundResponse({ description: 'Not found', schema: { example: { statusCode: 404, message: 'invalid creditioals' } }})
+  login(
+    @Body() user: LoginDto,
+  ): Observable<LoginResponse> {
+    return this.usersService.login(user);
+  }
+
+  @UseGuards(JwtAuthGuard)
   @Get()
+  @ApiBearerAuth()
   @ApiOkResponse({ type: [UserResource] })
   @ApiUnauthorizedResponse({ description: 'Unauthorized' })
   findAll(
