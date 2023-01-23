@@ -18,8 +18,8 @@ services:
       PORT: 3000
       DB_HOST: postgres
       DB_PORT: 5432
-      DB_USERNAME: ahmed
-      DB_PASSWORD: Ahmed1996;
+      DB_USERNAME: admin
+      DB_PASSWORD: Admin1234;
       DB_DATABASE: charity
       JWT_SECRET: CO7*cpM$U999GfMT
     depends_on:
@@ -31,6 +31,6 @@ services:
     ports:
       - 5432:5432
     environment:
-      POSTGRES_USER: ahmed
-      POSTGRES_PASSWORD: Ahmed1996;
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: Admin1234;
       POSTGRES_DB: charity
