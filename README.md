@@ -5,11 +5,15 @@ Charity Orders API is an open source api made using
 - docker
 - docker-compose
 - multi-stage enviroments on docker
+- passport / JWT Authotication
+- Authoraization
 - unit testing
 - postgres
+- TypeORM
 - openApi/Swagger
 - web socket
 - rate limit security
+- cache
 
 maybe we could add 
 

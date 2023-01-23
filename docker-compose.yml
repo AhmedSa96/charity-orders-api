@@ -6,7 +6,11 @@ services:
       dockerfile: Dockerfile
       target: dev
     volumes:
-      - .:/app
+      - ./src:/app/src
+      - ./package.json:/app/package.json
+      - ./yarn.lock:/app/yarn.lock
+      - ./tsconfig.json:/app/tsconfig.json
+      - ./tsconfig.build.json:/app/tsconfig.build.json
     ports:
       - 3000:3000
     environment:
@@ -20,6 +24,7 @@ services:
       JWT_SECRET: CO7*cpM$U999GfMT
     depends_on:
       - postgres  
+    restart: always
 
   postgres:
     image: postgres:13.2

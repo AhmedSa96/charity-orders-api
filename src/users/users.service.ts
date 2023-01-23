@@ -10,6 +10,7 @@ import { from, map, mergeMap, Observable, switchMap, tap } from 'rxjs';
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { UsersRepository } from './users.repository';
 import { plainToClass } from 'class-transformer';
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class UsersService {
@@ -20,15 +21,19 @@ export class UsersService {
 
   login(user: LoginDto): Observable<LoginResponse> {
     return this.findOneByEmail(user.email).pipe(
-      mergeMap((user) =>
-        from(this.authService.login(user)).pipe(
-          map((token) => {
-            return {
-              access_token: token.access_token,
-              user: plainToClass(UserResource, user),
-            } as LoginResponse;
-          }),
-        ),
+      mergeMap(userEntity =>
+        {
+          
+          return from(this.makeUserLogin(userEntity, user)).pipe(
+
+            map((token) => {
+              return {
+                access_token: token.access_token,
+                user: plainToClass(UserResource, userEntity),
+              } as LoginResponse;
+            })
+          );
+        },
       ),
     );
   }
@@ -59,7 +64,7 @@ export class UsersService {
   }
 
   create(user: CreateUserDto): Observable<UserResource> {
-    return from(this.usersRepository.save(user)).pipe(
+    return from(this.createNewUserWithHash(user)).pipe(
       map((user) => plainToClass(UserResource, user)),
     );
   }
@@ -82,4 +87,25 @@ export class UsersService {
       map((user) => plainToClass(UserResource, user)),
     );
   }
+
+  private async makeUserLogin(user: User, login: LoginDto): Promise<{ access_token: string }> {
+    const isPasswordMatch = await bcrypt.compare(login.password, user.password);
+    if (!isPasswordMatch) {
+      throw new NotFoundException();
+    }
+
+    return await this.authService.login(user);
+  }
+
+  private async createNewUserWithHash(user: CreateUserDto): Promise<User> {
+    const hash = await bcrypt.hash(user.password, 10);
+
+    const newUser = {
+      ...user,
+      password: hash,
+    };
+
+    return this.usersRepository.save(newUser);
+  }
+
 }
