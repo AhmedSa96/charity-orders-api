@@ -3,7 +3,6 @@ import { UpdateUserDto } from './models/update-user-dto';
 import { UserResource } from './models/user-resource';
 import { CreateUserDto } from './models/create-user-dto';
 import { Body, Controller, Delete, Get, Param, ParseIntPipe, Post, Put, Query, UseGuards } from '@nestjs/common';
-import { Observable } from 'rxjs';
 import { UsersService } from './users.service';
 import { ApiBearerAuth, ApiCreatedResponse, ApiNotFoundResponse, ApiOkResponse, ApiTags, ApiUnauthorizedResponse } from '@nestjs/swagger';
 import { FetchUsersFiltersDto } from './models/fetch-users-filters-dto';
@@ -18,10 +17,10 @@ export class UsersController {
   @Post('login')
   @ApiOkResponse({ type: LoginResponse })
   @ApiNotFoundResponse({ description: 'Not found', schema: { example: { statusCode: 404, message: 'invalid creditioals' } }})
-  login(
+  async login(
     @Body() user: LoginDto,
-  ): Observable<LoginResponse> {
-    return this.usersService.login(user);
+  ): Promise<LoginResponse> {
+    return await this.usersService.login(user);
   }
 
   @UseGuards(JwtAuthGuard)
@@ -29,47 +28,51 @@ export class UsersController {
   @ApiBearerAuth()
   @ApiOkResponse({ type: [UserResource] })
   @ApiUnauthorizedResponse({ description: 'Unauthorized' })
-  findAll(
+  async findAll(
     @Query() filters: FetchUsersFiltersDto,
-  ): Observable<UserResource[]> {
-    return this.usersService.findAll(filters);
+  ): Promise<UserResource[]> {
+    return await this.usersService.findAll(filters);
   }
 
+  @UseGuards(JwtAuthGuard)
   @Get(":id")
   @ApiOkResponse({ type: UserResource })
   @ApiUnauthorizedResponse({ description: 'Unauthorized' })
   @ApiNotFoundResponse({ description: 'Not found', schema: { example: { statusCode: 404, message: 'Not found' } }})
-  findOne(
+  async findOne(
     @Param('id', ParseIntPipe) id: number,
-  ): Observable<UserResource> {
-    return this.usersService.findOne(id);
+  ): Promise<UserResource> {
+    return await this.usersService.findOne(id);
   }
   
+  @UseGuards(JwtAuthGuard)
   @Post()
   @ApiCreatedResponse({ type: UserResource })
   @ApiUnauthorizedResponse({ description: 'Unauthorized' })
-  create(
+  async create(
     @Body() user: CreateUserDto,
-  ): Observable<UserResource> {
-    return this.usersService.create(user);
+  ): Promise<UserResource> {
+    return await this.usersService.create(user);
   }
 
+  @UseGuards(JwtAuthGuard)
   @Put()
   @ApiOkResponse({ type: UserResource })
   @ApiUnauthorizedResponse({ description: 'Unauthorized' })
-  update(
+  async update(
     @Body() user: UpdateUserDto,
-  ): Observable<UserResource> {
-    return this.usersService.update(user);
+  ): Promise<UserResource> {
+    return await this.usersService.update(user);
   }
 
+  @UseGuards(JwtAuthGuard)
   @Delete(":id")
   @ApiOkResponse({ type: UserResource })
   @ApiUnauthorizedResponse({ description: 'Unauthorized' })
-  delete(
+  async delete(
     @Param('id', ParseIntPipe) id: number,
-  ): Observable<UserResource> {
-    return this.usersService.delete(id);
+  ): Promise<UserResource> {
+    return await this.usersService.delete(id);
   }
 
 

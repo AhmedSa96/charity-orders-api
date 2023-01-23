@@ -6,7 +6,6 @@ import { UpdateUserDto } from './models/update-user-dto';
 import { FetchUsersFiltersDto } from './models/fetch-users-filters-dto';
 import { UserResource } from './models/user-resource';
 import { CreateUserDto } from './models/create-user-dto';
-import { from, map, mergeMap, Observable, switchMap, tap } from 'rxjs';
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { UsersRepository } from './users.repository';
 import { plainToClass } from 'class-transformer';
@@ -19,76 +18,69 @@ export class UsersService {
     private readonly authService: AuthService,
   ) {}
 
-  login(user: LoginDto): Observable<LoginResponse> {
-    return this.findOneByEmail(user.email).pipe(
-      mergeMap(userEntity =>
-        {
-          
-          return from(this.makeUserLogin(userEntity, user)).pipe(
+  async login(user: LoginDto): Promise<LoginResponse> {
+    const userEntity = await this.findOneByEmail(user.email);
+    const token = await this.makeUserLogin(userEntity, user);
 
-            map((token) => {
-              return {
-                access_token: token.access_token,
-                user: plainToClass(UserResource, userEntity),
-              } as LoginResponse;
-            })
-          );
-        },
-      ),
-    );
+    return {
+      access_token: token.access_token,
+      user: plainToClass(UserResource, userEntity),
+    } as LoginResponse;
   }
 
-  findAll(filters: FetchUsersFiltersDto): Observable<UserResource[]> {
-    return from(this.usersRepository.findAll(filters));
+  async findAll(filters: FetchUsersFiltersDto): Promise<UserResource[]> {
+    return await this.usersRepository.findAll(filters);
   }
 
-  findOneByEmail(email: string): Observable<User> {
-    return from(this.usersRepository.findOne({ where: { email } })).pipe(
-      tap((user) => {
-        if (!user) {
-          throw new NotFoundException();
-        }
-      }),
-    );
+  async findOneByEmail(email: string): Promise<User> {
+    const user = await this.usersRepository.findOne({ where: { email } });
+    if (!user) {
+      throw new NotFoundException();
+    }
+
+    return user;
   }
 
-  findOne(id: number): Observable<UserResource> {
-    return from(this.usersRepository.findOne({ where: { id } })).pipe(
-      tap((user) => {
-        if (!user) {
-          throw new NotFoundException();
-        }
-      }),
-      map((user) => plainToClass(UserResource, user)),
-    );
+  async findOne(id: number): Promise<UserResource> {
+    const user = await this.usersRepository.findOne({ where: { id } });
+    if (!user) {
+      throw new NotFoundException();
+    }
+
+    return plainToClass(UserResource, user);
   }
 
-  create(user: CreateUserDto): Observable<UserResource> {
-    return from(this.createNewUserWithHash(user)).pipe(
-      map((user) => plainToClass(UserResource, user)),
-    );
+  async create(user: CreateUserDto): Promise<UserResource> {
+    const hash = await bcrypt.hash(user.password, 10);
+
+    const savedUser = this.usersRepository.upsert({
+      ...user,
+      password: hash,
+    }, { conflictPaths: ['id']  });
+
+    return plainToClass(UserResource, savedUser);
   }
 
-  update(user: UpdateUserDto): Observable<UserResource> {
-    return from(this.findOne(user.id)).pipe(
-      switchMap((_) => from(this.usersRepository.save(user))),
-      map((user) => plainToClass(UserResource, user)),
-    );
+  async update(user: UpdateUserDto): Promise<UserResource> {
+    await this.findOne(user.id);
+
+    const newUser = await this.usersRepository.update(user.id, user);
+
+    return plainToClass(UserResource, newUser);
   }
 
-  delete(id: number): Observable<UserResource> {
-    return from(this.findOne(id)).pipe(
-      switchMap((user) =>
-        from(this.usersRepository.delete(id)).pipe(
-          tap(() => console.log(user)),
-          map(() => user),
-        ),
-      ),
-      map((user) => plainToClass(UserResource, user)),
-    );
+  async delete(id: number): Promise<UserResource> {
+    const user = await this.findOne(id);
+
+    await this.usersRepository.delete(id);
+
+    return user;
   }
 
-  private async makeUserLogin(user: User, login: LoginDto): Promise<{ access_token: string }> {
+  private async makeUserLogin(
+    user: User,
+    login: LoginDto,
+  ): Promise<{ access_token: string }> {
     const isPasswordMatch = await bcrypt.compare(login.password, user.password);
     if (!isPasswordMatch) {
       throw new NotFoundException();
@@ -96,16 +88,4 @@ export class UsersService {
 
     return await this.authService.login(user);
   }
-
-  private async createNewUserWithHash(user: CreateUserDto): Promise<User> {
-    const hash = await bcrypt.hash(user.password, 10);
-
-    const newUser = {
-      ...user,
-      password: hash,
-    };
-
-    return this.usersRepository.save(newUser);
-  }
-
 }

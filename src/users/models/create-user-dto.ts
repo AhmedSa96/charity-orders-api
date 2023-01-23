@@ -3,6 +3,10 @@ import { IsEmail, IsEnum, IsNotEmpty, MaxLength, MinLength } from 'class-validat
 import { UserType } from '../entities/user.entity';
 
 export class CreateUserDto {
+
+  @ApiProperty({ required: false, description: 'id send for update, dont send for create' })
+  id?: number;
+
   @ApiProperty()
   @IsNotEmpty({ message: 'first name is required' })
   first_name: string;
@@ -21,9 +25,8 @@ export class CreateUserDto {
   @MaxLength(12, { message: 'phone number must be at most 12 digits' })
   phone: string;
 
-  @ApiProperty()
-  @IsNotEmpty({ message: 'password is required' })
-  password: string;
+  @ApiProperty({ required: false, description: 'password is required for create, dont send for update' })
+  password?: string;
 
   @ApiProperty({ enum: UserType, default: UserType.BENEFICIARY })
   @IsNotEmpty({ message: 'user type is required' })
