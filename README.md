@@ -7,6 +7,7 @@ Charity Orders API is an open source api made using
 - multi-stage enviroments on docker
 - passport / JWT Authotication
 - Authoraization
+- password hashing
 - unit testing
 - postgres
 - TypeORM
