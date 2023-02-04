@@ -1,6 +1,3 @@
-import { LoginDto } from '../auth/models/login-dto';
-import { LoginResponse } from '../auth/models/login-response';
-import { AuthService } from './../auth/auth.service';
 import { User } from './entities/user.entity';
 import { UpdateUserDto } from './models/update-user-dto';
 import { FetchUsersFiltersDto } from './models/fetch-users-filters-dto';
