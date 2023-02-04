@@ -1,15 +1,15 @@
-import { Controller, Get, Post, Body, Param, Delete, Put, UseGuards } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, Delete, UseGuards, Patch } from '@nestjs/common';
 import { OrdersService } from './orders.service';
 import { CreateOrderDto } from './dto/create-order.dto';
 import { UpdateOrderDto } from './dto/update-order.dto';
 import { ApiOkResponse, ApiUnauthorizedResponse } from '@nestjs/swagger';
-import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
+import * as jwtAuthGuard from '../auth/jwt-auth.guard';
 
 @Controller('orders')
 export class OrdersController {
   constructor(private readonly ordersService: OrdersService) {}
 
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(jwtAuthGuard.JwtAuthGuard)
   @Post()
   @ApiOkResponse({ description: 'The record has been successfully created.' })
   @ApiUnauthorizedResponse({ description: 'Unauthorized' })
@@ -17,7 +17,7 @@ export class OrdersController {
     return this.ordersService.create(createOrderDto);
   }
 
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(jwtAuthGuard.JwtAuthGuard)
   @Get()
   @ApiOkResponse({ description: 'The records have been successfully retrieved.' })
   @ApiUnauthorizedResponse({ description: 'Unauthorized' })
@@ -25,7 +25,7 @@ export class OrdersController {
     return this.ordersService.findAll();
   }
 
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(jwtAuthGuard.JwtAuthGuard)
   @Get(':id')
   @ApiOkResponse({ description: 'The record has been successfully retrieved.' })
   @ApiUnauthorizedResponse({ description: 'Unauthorized' })
@@ -33,15 +33,15 @@ export class OrdersController {
     return this.ordersService.findOne(+id);
   }
 
-  @UseGuards(JwtAuthGuard)
-  @Put(':id')
+  @UseGuards(jwtAuthGuard.JwtAuthGuard)
+  @Patch(':id')
   @ApiOkResponse({ description: 'The record has been successfully updated.' })
   @ApiUnauthorizedResponse({ description: 'Unauthorized' })
   update(@Param('id') id: string, @Body() updateOrderDto: UpdateOrderDto) {
     return this.ordersService.update(+id, updateOrderDto);
   }
 
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(jwtAuthGuard.JwtAuthGuard)
   @Delete(':id')
   @ApiOkResponse({ description: 'The record has been successfully deleted.' })
   @ApiUnauthorizedResponse({ description: 'Unauthorized' })
