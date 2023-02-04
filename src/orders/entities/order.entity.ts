@@ -35,7 +35,7 @@ export class Order {
 
     // user as owner
     @ApiProperty()
-    @ManyToOne(type => User, user => user.orders)
+    @ManyToOne(type => User, user => user.orders, { onDelete: 'CASCADE' })
     user: User;
 
 
