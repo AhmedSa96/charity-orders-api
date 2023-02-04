@@ -1,5 +1,5 @@
-import { LoginDto } from './models/login-dto';
-import { LoginResponse } from './models/login-response';
+import { LoginDto } from '../auth/models/login-dto';
+import { LoginResponse } from '../auth/models/login-response';
 import { AuthService } from './../auth/auth.service';
 import { User } from './entities/user.entity';
 import { UpdateUserDto } from './models/update-user-dto';
@@ -15,18 +15,7 @@ import * as bcrypt from 'bcrypt';
 export class UsersService {
   constructor(
     private readonly usersRepository: UsersRepository,
-    private readonly authService: AuthService,
   ) {}
-
-  async login(user: LoginDto): Promise<LoginResponse> {
-    const userEntity = await this.findOneByEmail(user.email);
-    const token = await this.makeUserLogin(userEntity, user);
-
-    return {
-      access_token: token.access_token,
-      user: plainToClass(UserResource, userEntity),
-    } as LoginResponse;
-  }
 
   async findAll(filters: FetchUsersFiltersDto): Promise<UserResource[]> {
     return await this.usersRepository.findAll(filters);
@@ -77,15 +66,5 @@ export class UsersService {
     return user;
   }
 
-  private async makeUserLogin(
-    user: User,
-    login: LoginDto,
-  ): Promise<{ access_token: string }> {
-    const isPasswordMatch = await bcrypt.compare(login.password, user.password);
-    if (!isPasswordMatch) {
-      throw new NotFoundException();
-    }
-
-    return await this.authService.login(user);
-  }
+  
 }

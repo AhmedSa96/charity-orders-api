@@ -6,22 +6,10 @@ import { Body, Controller, Delete, Get, Param, ParseIntPipe, Post, Put, Query, U
 import { UsersService } from './users.service';
 import { ApiBearerAuth, ApiCreatedResponse, ApiNotFoundResponse, ApiOkResponse, ApiTags, ApiUnauthorizedResponse } from '@nestjs/swagger';
 import { FetchUsersFiltersDto } from './models/fetch-users-filters-dto';
-import { LoginDto } from './models/login-dto';
-import { LoginResponse } from './models/login-response';
-
 @ApiTags('users')
 @Controller('users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
-
-  @Post('login')
-  @ApiOkResponse({ type: LoginResponse })
-  @ApiNotFoundResponse({ description: 'Not found', schema: { example: { statusCode: 404, message: 'invalid creditioals' } }})
-  async login(
-    @Body() user: LoginDto,
-  ): Promise<LoginResponse> {
-    return await this.usersService.login(user);
-  }
 
   @UseGuards(JwtAuthGuard)
   @Get()
