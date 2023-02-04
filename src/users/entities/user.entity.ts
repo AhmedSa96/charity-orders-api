@@ -1,11 +1,13 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Exclude } from 'class-transformer';
 import { IsEmail, IsNotEmpty, Matches } from 'class-validator';
+import { Order } from 'src/orders/entities/order.entity';
 import {
   Column,
   CreateDateColumn,
   DeleteDateColumn,
   Entity,
+  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
@@ -66,4 +68,8 @@ export class User {
   @ApiProperty()
   @DeleteDateColumn()
   deleted_at: Date;
+
+  @ApiProperty()
+  @OneToMany(type => Order, order => order.user)
+  orders: Order[];
 }
