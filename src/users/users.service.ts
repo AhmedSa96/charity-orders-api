@@ -39,10 +39,12 @@ export class UsersService {
   async create(user: CreateUserDto): Promise<UserResource> {
     const hash = await bcrypt.hash(user.password, 10);
 
-    const savedUser = this.usersRepository.upsert({
+    const newUser = this.usersRepository.create({
       ...user,
       password: hash,
-    }, { conflictPaths: ['id']  });
+    });
+
+    const savedUser = await this.usersRepository.save(newUser);
 
     return plainToClass(UserResource, savedUser);
   }
