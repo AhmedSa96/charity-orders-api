@@ -2,22 +2,24 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CreateOrderDto } from './dto/create-order.dto';
+import { GetOrdersFiltersDto } from './dto/get-orders-filters-dto';
 import { UpdateOrderDto } from './dto/update-order.dto';
 import { Order } from './entities/order.entity';
+import { OrdersRepository } from './orders.repository';
 
 @Injectable()
 export class OrdersService {
   constructor(
-    @InjectRepository(Order) private ordersRepository: Repository<Order>
+    private readonly ordersRepository: OrdersRepository
   ) { }
 
   async create(createOrderDto: CreateOrderDto) {
-    const order = await this.ordersRepository.create(createOrderDto);
+    const order = this.ordersRepository.create(createOrderDto);
     return await this.ordersRepository.save(order);
   }
 
-  async findAll() {
-    return await this.ordersRepository.find({ relations: ['user'] });
+  async findAll(filters: GetOrdersFiltersDto) {
+    return await this.ordersRepository.findOrdersByFilters(filters);
   }
 
   async findOne(id: number) {
@@ -37,6 +39,6 @@ export class OrdersService {
 
   async remove(id: number) {
     const order = await this.findOne(id);
-    return await this.ordersRepository.remove(order);
+    return await this.ordersRepository.softRemove(order);
   }
 }

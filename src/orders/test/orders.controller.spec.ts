@@ -41,12 +41,12 @@ describe('OrdersController', () => {
 
   describe('findAll', () => {
     it('should findAll function to be called', async () => {
-      await controller.findAll();
+      await controller.findAll({ page: 1, limit: 10, search: '' });
       expect(service.findAll).toBeCalled();
     });
 
     it('should return an array of orders', async () => {
-      const orders = await controller.findAll();
+      const orders = await controller.findAll({ page: 1, limit: 10, search: '' });
       expect(orders).toEqual([fakeOrder()]);
     });
   });
