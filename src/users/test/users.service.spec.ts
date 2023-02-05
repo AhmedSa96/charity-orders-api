@@ -1,4 +1,4 @@
-import { User, UserType } from '../entities/user.entity';
+import { User } from '../entities/user.entity';
 import { Test, TestingModule } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { fackCreateUserDto, fackUpdateUserDto, fackUser } from '../test/fack-data/users.fack-data';

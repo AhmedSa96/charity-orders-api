@@ -3,9 +3,6 @@ import { UserResource } from './../../models/user-resource';
 import { User, UserType } from './../../entities/user.entity';
 import { CreateUserDto } from 'src/users/models/create-user-dto';
 
-// const date
-
-
 export const fackUser = (): UserResource => ({
   id: 1,
   email: 'test@test.com',
