@@ -1,9 +1,10 @@
-import { Controller, Get, Post, Body, Param, Delete, UseGuards, Patch } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, Delete, UseGuards, Patch, Query } from '@nestjs/common';
 import { OrdersService } from './orders.service';
 import { CreateOrderDto } from './dto/create-order.dto';
 import { UpdateOrderDto } from './dto/update-order.dto';
 import { ApiOkResponse, ApiUnauthorizedResponse } from '@nestjs/swagger';
 import * as jwtAuthGuard from '../auth/jwt-auth.guard';
+import { GetOrdersFiltersDto } from './dto/get-orders-filters-dto';
 
 @Controller('orders')
 export class OrdersController {
@@ -21,8 +22,8 @@ export class OrdersController {
   @Get()
   @ApiOkResponse({ description: 'The records have been successfully retrieved.' })
   @ApiUnauthorizedResponse({ description: 'Unauthorized' })
-  findAll() {
-    return this.ordersService.findAll();
+  findAll(@Query() filters: GetOrdersFiltersDto) {
+    return this.ordersService.findAll(filters);
   }
 
   @UseGuards(jwtAuthGuard.JwtAuthGuard)
