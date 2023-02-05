@@ -7,7 +7,7 @@ import { AuthGuard } from '@nestjs/passport';
 import { UserType } from 'src/users/entities/user.entity';
 
 @Injectable()
-export class JwtAuthGuard extends AuthGuard('jwt') {
+export class AdminGuard extends AuthGuard('jwt') {
 
   handleRequest(err, user, info) {
     if (err || !user) {
