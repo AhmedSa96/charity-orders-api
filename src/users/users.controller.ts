@@ -27,7 +27,19 @@ export class UsersController {
   }
 
   @UseGuards(JwtAuthGuard)
+  @Get("orders")
+  @ApiBearerAuth()
+  @ApiOkResponse()
+  @ApiUnauthorizedResponse({ description: 'Unauthorized' })
+  async findOrders(
+    @User() user: CurrentAuthUser,
+  ) {
+    return await this.usersService.findOrdersByUserId(user.id);
+  }
+
+  @UseGuards(JwtAuthGuard)
   @Get(":id")
+  @ApiBearerAuth()
   @ApiOkResponse({ type: UserResource })
   @ApiUnauthorizedResponse({ description: 'Unauthorized' })
   @ApiNotFoundResponse({ description: 'Not found', schema: { example: { statusCode: 404, message: 'Not found' } }})
@@ -39,6 +51,7 @@ export class UsersController {
   
   @UseGuards(JwtAuthGuard, AdminGuard)
   @Post()
+  @ApiBearerAuth()
   @ApiCreatedResponse({ type: UserResource })
   @ApiUnauthorizedResponse({ description: 'Unauthorized' })
   async create(
@@ -49,6 +62,7 @@ export class UsersController {
 
   @UseGuards(JwtAuthGuard)
   @Put()
+  @ApiBearerAuth()
   @ApiOkResponse({ type: UserResource })
   @ApiUnauthorizedResponse({ description: 'Unauthorized' })
   async update(
@@ -59,21 +73,12 @@ export class UsersController {
 
   @UseGuards(JwtAuthGuard)
   @Delete(":id")
+  @ApiBearerAuth()
   @ApiOkResponse({ type: UserResource })
   @ApiUnauthorizedResponse({ description: 'Unauthorized' })
   async delete(
     @Param('id', ParseIntPipe) id: number,
   ): Promise<UserResource> {
     return await this.usersService.delete(id);
-  }
-
-  @UseGuards(JwtAuthGuard)
-  @Get("orders")
-  @ApiOkResponse({ type: [UserResource] })
-  @ApiUnauthorizedResponse({ description: 'Unauthorized' })
-  async findOrders(
-    @User() user: CurrentAuthUser,
-  ): Promise<UserResource[]> {
-    return await this.usersService.findOrdersByUserId(user.id);
   }
 }
