@@ -10,6 +10,7 @@ import { LoginResponse } from './models/login-response';
 import { UsersService } from 'src/users/users.service';
 import { UserResource } from 'src/users/models/user-resource';
 import { plainToClass } from 'class-transformer';
+import { CurrentAuthUser } from './models/current-auth-user';
 
 @Injectable()
 export class AuthService {
@@ -34,7 +35,8 @@ export class AuthService {
     //   }
     
       async login(user: any) {
-        const payload = { email: user.email, sub: user.id, user_type: user.user_type };
+        const { id, email, user_type } = user;
+        const payload: CurrentAuthUser = { id, email, sub: id, user_type };
         return {
           access_token: this.jwtService.sign(payload),
         };
