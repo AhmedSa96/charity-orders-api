@@ -1,7 +1,8 @@
-import { fackUser, fackCreateUserDto, fackUpdateUserDto } from './fack-data/users.fack-data';
+import { fakeUser, fakeCreateUserDto, fakeUpdateUserDto, fakeCurrentUserAuth } from './fack-data/users.fack-data';
 import { Test, TestingModule } from '@nestjs/testing';
 import { UsersController } from '../users.controller';
 import { UsersService } from '../users.service';
+import { fakeOrder } from '../../orders/test/fake-data/fake-orders';
 
 jest.mock('../users.service');
 
@@ -32,7 +33,7 @@ describe('UsersController', () => {
     it('should return an array of users', async () => {
       const result = await controller.findAll({ page: 1, limit: 10, user_type: null });
       expect(result).toBeInstanceOf(Array);
-      expect(result).toEqual([fackUser()]);
+      expect(result).toEqual([fakeUser()]);
     });
   });
   
@@ -44,31 +45,31 @@ describe('UsersController', () => {
     it('should return an user', async () => {
       const result = await controller.findOne(1);
       expect(result).toBeInstanceOf(Object);
-      expect(result).toEqual(fackUser());
+      expect(result).toEqual(fakeUser());
     });
   });
 
   describe('create', () => {
     it('should call usersService.create', () => {
-      const result = controller.create(fackCreateUserDto());
-      expect(service.create).toHaveBeenCalledWith(fackCreateUserDto());
+      const result = controller.create(fakeCreateUserDto());
+      expect(service.create).toHaveBeenCalledWith(fakeCreateUserDto());
     });
     it('should return an user', async () => {
-      const result = await controller.create(fackCreateUserDto());
+      const result = await controller.create(fakeCreateUserDto());
       expect(result).toBeInstanceOf(Object);
-      expect(result).toEqual(fackUser());
+      expect(result).toEqual(fakeUser());
     });
   });
 
   describe('update', () => {
     it('should call usersService.update', () => {
-      const result = controller.update(fackUpdateUserDto());
-      expect(service.update).toHaveBeenCalledWith(fackUpdateUserDto());
+      const result = controller.update(fakeUpdateUserDto());
+      expect(service.update).toHaveBeenCalledWith(fakeUpdateUserDto());
     });
     it('should return an user', async () => {
-      const result = await controller.update(fackUpdateUserDto());
+      const result = await controller.update(fakeUpdateUserDto());
       expect(result).toBeInstanceOf(Object);
-      expect(result).toEqual(fackUser());
+      expect(result).toEqual(fakeUser());
     });
   });
 
@@ -80,9 +81,20 @@ describe('UsersController', () => {
     it('should return an user', async () => {
       const result = await controller.delete(1);
       expect(result).toBeInstanceOf(Object);
-      expect(result).toEqual(fackUser());
+      expect(result).toEqual(fakeUser());
     });
   });
 
+  describe('orders', () => {
+    it('should call usersService.orders', () => {
+      const result = controller.findOrders(fakeCurrentUserAuth());
+      expect(service.findOrdersByUserId).toHaveBeenCalledWith(1);
+    });
+    it('should return an user', async () => {
+      const result = await controller.findOrders(fakeCurrentUserAuth());
+      expect(result).toBeInstanceOf(Array);
+      expect(result).toEqual([fakeOrder()]);
+    });
+  });
 
 });
