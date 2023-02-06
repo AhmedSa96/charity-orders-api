@@ -2,8 +2,16 @@ import { UpdateUserDto } from './../../models/update-user-dto';
 import { UserResource } from './../../models/user-resource';
 import { User, UserType } from './../../entities/user.entity';
 import { CreateUserDto } from 'src/users/models/create-user-dto';
+import { CurrentAuthUser } from 'src/auth/models/current-auth-user';
 
-export const fackUser = (): UserResource => ({
+export const fakeCurrentUserAuth = (): CurrentAuthUser => ({
+  id: 1,
+  email: 'ahmed@salah.dev',
+  sub: 1,
+  user_type: UserType.ADMIN,
+});
+
+export const fakeUser = (): UserResource => ({
   id: 1,
   email: 'test@test.com',
   first_name: 'test',
@@ -13,7 +21,7 @@ export const fackUser = (): UserResource => ({
   updated_at: null,
 });
 
-export const fackCreateUserDto = (): CreateUserDto => ({
+export const fakeCreateUserDto = (): CreateUserDto => ({
     email: 'test@test.com',
     first_name: 'test',
     last_name: 'test',
@@ -22,7 +30,7 @@ export const fackCreateUserDto = (): CreateUserDto => ({
     user_type: UserType.BENEFICIARY,
 });
 
-export const fackUpdateUserDto = (): UpdateUserDto => ({
+export const fakeUpdateUserDto = (): UpdateUserDto => ({
     id: 1,
     email: 'test@test.com',
     first_name: 'test',
