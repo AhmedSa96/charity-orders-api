@@ -7,6 +7,7 @@ import {
   CreateDateColumn,
   DeleteDateColumn,
   Entity,
+  ManyToMany,
   OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
@@ -72,4 +73,8 @@ export class User {
   @ApiProperty()
   @OneToMany(type => Order, order => order.user)
   orders: Order[];
+
+  @ApiProperty()
+  @ManyToMany(type => Order)
+  favorate_orders: Order[];
 }
