@@ -2,7 +2,7 @@ import { Controller, Get, Post, Body, Param, Delete, UseGuards, Patch, Query } f
 import { OrdersService } from './orders.service';
 import { CreateOrderDto } from './dto/create-order.dto';
 import { UpdateOrderDto } from './dto/update-order.dto';
-import { ApiOkResponse, ApiTags, ApiUnauthorizedResponse } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiOkResponse, ApiTags, ApiUnauthorizedResponse } from '@nestjs/swagger';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { GetOrdersFiltersDto } from './dto/get-orders-filters-dto';
 
@@ -15,14 +15,16 @@ export class OrdersController {
   @Post()
   @ApiOkResponse({ description: 'The record has been successfully created.' })
   @ApiUnauthorizedResponse({ description: 'Unauthorized' })
+  @ApiBearerAuth()
   create(@Body() createOrderDto: CreateOrderDto) {
     return this.ordersService.create(createOrderDto);
   }
 
-  // @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard)
   @Get()
   @ApiOkResponse({ description: 'The records have been successfully retrieved.' })
   @ApiUnauthorizedResponse({ description: 'Unauthorized' })
+  @ApiBearerAuth()
   async findAll(@Query() filters: GetOrdersFiltersDto) {
     return await this.ordersService.findAll(filters);
   }
@@ -31,6 +33,7 @@ export class OrdersController {
   @Get(':id')
   @ApiOkResponse({ description: 'The record has been successfully retrieved.' })
   @ApiUnauthorizedResponse({ description: 'Unauthorized' })
+  @ApiBearerAuth()
   findOne(@Param('id') id: string) {
     return this.ordersService.findOne(+id);
   }
@@ -39,6 +42,7 @@ export class OrdersController {
   @Patch(':id')
   @ApiOkResponse({ description: 'The record has been successfully updated.' })
   @ApiUnauthorizedResponse({ description: 'Unauthorized' })
+  @ApiBearerAuth()
   update(@Param('id') id: string, @Body() updateOrderDto: UpdateOrderDto) {
     return this.ordersService.update(+id, updateOrderDto);
   }
@@ -47,6 +51,7 @@ export class OrdersController {
   @Delete(':id')
   @ApiOkResponse({ description: 'The record has been successfully deleted.' })
   @ApiUnauthorizedResponse({ description: 'Unauthorized' })
+  @ApiBearerAuth()
   remove(@Param('id') id: string) {
     return this.ordersService.remove(+id);
   }
