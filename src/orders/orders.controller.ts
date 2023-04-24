@@ -19,12 +19,12 @@ export class OrdersController {
     return this.ordersService.create(createOrderDto);
   }
 
-  @UseGuards(JwtAuthGuard)
+  // @UseGuards(JwtAuthGuard)
   @Get()
   @ApiOkResponse({ description: 'The records have been successfully retrieved.' })
   @ApiUnauthorizedResponse({ description: 'Unauthorized' })
-  findAll(@Query() filters: GetOrdersFiltersDto) {
-    return this.ordersService.findAll(filters);
+  async findAll(@Query() filters: GetOrdersFiltersDto) {
+    return await this.ordersService.findAll(filters);
   }
 
   @UseGuards(JwtAuthGuard)

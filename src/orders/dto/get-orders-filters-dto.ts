@@ -1,13 +1,19 @@
 import { ApiProperty } from "@nestjs/swagger";
+import { Type } from "class-transformer";
+import { IsNumber } from "class-validator";
 
 export class GetOrdersFiltersDto {
 
-    @ApiProperty()
-    page: number = 1;
+    @ApiProperty({ default: 1, required: false })
+    @IsNumber()
+    @Type(() => Number)
+    page?: number;
 
-    @ApiProperty()
-    limit: number = 10;
+    @ApiProperty({ default: 10, required: false })
+    @IsNumber()
+    @Type(() => Number)
+    limit?: number;
 
-    @ApiProperty()
+    @ApiProperty({ required: false })
     search?: string;
 }

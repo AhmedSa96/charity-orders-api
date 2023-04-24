@@ -4,7 +4,7 @@ import { Injectable } from '@nestjs/common';
 import { Repository, DataSource, IsNull } from 'typeorm';
 import { User } from './entities/user.entity';
 import { getSelectColumns } from 'src/shared/utils/get-select-columns';
-import { paginate } from 'src/shared/utils/paginate';
+import {  } from 'src/shared/utils/paginate';
 
 @Injectable()
 export class UsersRepository extends Repository<User> {
@@ -13,7 +13,7 @@ export class UsersRepository extends Repository<User> {
         super(User, dataSource.createEntityManager());
     }
 
-    async findAll(filters: FetchUsersFiltersDto): Promise<UserResource[]> {
+    async findAll(filters: FetchUsersFiltersDto) {
         let query = this.createQueryBuilder()
             .select(getSelectColumns(UserResource, User))
 
@@ -21,8 +21,8 @@ export class UsersRepository extends Repository<User> {
             query.andWhere({ user_type: filters.user_type });
         }
 
-        query = paginate(query, filters.page, filters.limit);
+        // query = paginate(query, filters.page, filters.limit);
 
-        return await query.getRawMany();
+        return await query.paginate({ page: filters.page, per_page: filters.limit });
     }
 }

@@ -14,7 +14,7 @@ export class UsersService {
     private readonly usersRepository: UsersRepository,
   ) {}
 
-  async findAll(filters: FetchUsersFiltersDto): Promise<UserResource[]> {
+  async findAll(filters: FetchUsersFiltersDto) {
     return await this.usersRepository.findAll(filters);
   }
 

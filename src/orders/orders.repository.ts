@@ -1,5 +1,5 @@
 import { Injectable } from "@nestjs/common";
-import { paginate } from "src/shared/utils/paginate";
+import  "../shared/utils/paginate";
 import { DataSource, Like, Repository } from "typeorm";
 import { GetOrdersFiltersDto } from "./dto/get-orders-filters-dto";
 import { Order } from "./entities/order.entity";
@@ -17,8 +17,7 @@ export class OrdersRepository extends Repository<Order> {
         if (filters.search)
             query.andWhere({ title: Like(`%${filters.search}%`) })
 
-        query = paginate(query, filters.page, filters.limit);
 
-        return await query.getMany()
+        return await query.paginate({ page: filters.page, per_page: filters.limit });
     }
 }

@@ -7,9 +7,9 @@ import { UsersService } from './users.service';
 import { ApiBearerAuth, ApiCreatedResponse, ApiNotFoundResponse, ApiOkResponse, ApiTags, ApiUnauthorizedResponse } from '@nestjs/swagger';
 import { FetchUsersFiltersDto } from './models/fetch-users-filters-dto';
 import { AdminGuard } from '../auth/admin.guard';
-import { User } from 'src/shared/decorators/user.decorator';
-import { UserType } from './entities/user.entity';
+import { User as UserModel } from './entities/user.entity';
 import { CurrentAuthUser } from 'src/auth/models/current-auth-user';
+import { User } from '../shared/decorators/user.decorator';
 @ApiTags('users')
 @Controller('users')
 export class UsersController {
@@ -18,11 +18,11 @@ export class UsersController {
   @UseGuards(JwtAuthGuard, AdminGuard)
   @Get()
   @ApiBearerAuth()
-  @ApiOkResponse({ type: [UserResource] })
+  @ApiOkResponse({ type: [UserModel] })
   @ApiUnauthorizedResponse({ description: 'Unauthorized' })
   async findAll(
     @Query() filters: FetchUsersFiltersDto,
-  ): Promise<UserResource[]> {
+  ) {
     return await this.usersService.findAll(filters);
   }
 
