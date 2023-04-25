@@ -28,7 +28,7 @@ export const fakeProduct = (): Product => ({
         deleted_at: null,
         orders: [],
         products: [],
-        favorate_products: [],
+        favorate: [],
     },
 });
 

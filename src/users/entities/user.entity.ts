@@ -7,6 +7,7 @@ import {
   CreateDateColumn,
   DeleteDateColumn,
   Entity,
+  JoinTable,
   ManyToMany,
   OneToMany,
   PrimaryGeneratedColumn,
@@ -80,6 +81,7 @@ export class User {
   products: Order[];
 
   @ApiProperty()
-  @ManyToMany(type => Product)
-  favorate_products: Product[];
+  @ManyToMany(type => Product, { cascade: true })
+  @JoinTable()
+  favorate: Product[];
 }
