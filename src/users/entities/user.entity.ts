@@ -12,6 +12,7 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
+import { Product } from '../../products/entities/product.entity';
 
 export enum UserType {
   ADMIN = 'admin',
@@ -73,8 +74,12 @@ export class User {
   @ApiProperty()
   @OneToMany(type => Order, order => order.user)
   orders: Order[];
+  
+  @ApiProperty()
+  @OneToMany(type => Product, product => product.owner)
+  products: Order[];
 
   @ApiProperty()
-  @ManyToMany(type => Order)
-  favorate_orders: Order[];
+  @ManyToMany(type => Product)
+  favorate_products: Product[];
 }

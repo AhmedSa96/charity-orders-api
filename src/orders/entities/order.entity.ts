@@ -1,7 +1,8 @@
 import { ApiProperty } from "@nestjs/swagger";
 import { Exclude } from "class-transformer";
 import { User } from "../../users/entities/user.entity";
-import { Column, DeleteDateColumn, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Column, DeleteDateColumn, Entity, ManyToMany, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Product } from "../../products/entities/product.entity";
 
 @Entity()
 export class Order {
@@ -37,6 +38,10 @@ export class Order {
     @ApiProperty()
     @ManyToOne(type => User, user => user.orders, { onDelete: 'CASCADE' })
     user: User;
+
+    @ApiProperty()
+    @ManyToMany(type => Product, product => product.orders)
+    products: Product[];
 
     @Exclude()
     @ApiProperty()

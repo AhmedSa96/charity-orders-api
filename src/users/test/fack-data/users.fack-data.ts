@@ -1,8 +1,8 @@
 import { UpdateUserDto } from './../../models/update-user-dto';
 import { UserResource } from './../../models/user-resource';
 import { User, UserType } from './../../entities/user.entity';
-import { CreateUserDto } from 'src/users/models/create-user-dto';
-import { CurrentAuthUser } from 'src/auth/models/current-auth-user';
+import { CreateUserDto } from '../../../users/models/create-user-dto';
+import { CurrentAuthUser } from '../../../auth/models/current-auth-user';
 
 export const fakeCurrentUserAuth = (): CurrentAuthUser => ({
   id: 1,

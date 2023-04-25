@@ -3,8 +3,8 @@ import { FetchUsersFiltersDto } from './models/fetch-users-filters-dto';
 import { Injectable } from '@nestjs/common';
 import { Repository, DataSource, IsNull } from 'typeorm';
 import { User } from './entities/user.entity';
-import { getSelectColumns } from 'src/shared/utils/get-select-columns';
-import {  } from 'src/shared/utils/paginate';
+import { getSelectColumns } from '../shared/utils/get-select-columns';
+import '../shared/utils/paginate';
 
 @Injectable()
 export class UsersRepository extends Repository<User> {
