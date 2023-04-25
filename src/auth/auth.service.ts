@@ -4,11 +4,11 @@ import { LoginDto } from './models/login-dto';
 // import { UsersService } from './../users/users.service';
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { User } from 'src/users/entities/user.entity';
+import { User } from '../users/entities/user.entity';
 import * as bcrypt from 'bcrypt';
 import { LoginResponse } from './models/login-response';
-import { UsersService } from 'src/users/users.service';
-import { UserResource } from 'src/users/models/user-resource';
+import { UsersService } from '../users/users.service';
+import { UserResource } from '../users/models/user-resource';
 import { plainToClass } from 'class-transformer';
 import { CurrentAuthUser } from './models/current-auth-user';
 
