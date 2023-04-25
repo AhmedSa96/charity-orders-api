@@ -41,12 +41,12 @@ describe('ProductsController', () => {
 
   describe('findAll', () => {
     it('should findAll function to be called', async () => {
-      await controller.findAll();
+      await controller.findAll({ });
       expect(service.findAll).toBeCalled();
     });
 
     it('should return an array of products', async () => {
-      const orders = await controller.findAll();
+      const orders = await controller.findAll({});
       expect(orders).toEqual([fakeProduct()]);
     });
   });
