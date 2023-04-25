@@ -8,7 +8,7 @@ import { ApiBearerAuth, ApiCreatedResponse, ApiNotFoundResponse, ApiOkResponse, 
 import { FetchUsersFiltersDto } from './models/fetch-users-filters-dto';
 import { AdminGuard } from '../auth/admin.guard';
 import { User as UserModel } from './entities/user.entity';
-import { CurrentAuthUser } from 'src/auth/models/current-auth-user';
+import { CurrentAuthUser } from '../auth/models/current-auth-user';
 import { User } from '../shared/decorators/user.decorator';
 @ApiTags('users')
 @Controller('users')
