@@ -2,6 +2,7 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { ProductsRepository } from './products.repository';
 import { CreateProductDto } from './models/create-product-dto';
 import { UpdateProductDto } from './models/update-product-dto';
+import { GetProductsFilters } from './models/get-products-filters';
 
 @Injectable()
 export class ProductsService {
@@ -10,8 +11,8 @@ export class ProductsService {
         private readonly productsRepository: ProductsRepository,
     ) { }
 
-    async findAll() {
-        return await this.productsRepository.find();
+    async findAll(filters: GetProductsFilters) {
+        return await this.productsRepository.findByFilters(filters);
     }
 
     async findOne(id: number) {
@@ -24,7 +25,8 @@ export class ProductsService {
     }
 
     async create(product: CreateProductDto) {
-        return await this.productsRepository.save(product);
+        const newProduct = this.productsRepository.create(product);
+        return await this.productsRepository.save(newProduct);
     }
 
     async update(id: number, updateProductDto: UpdateProductDto) {

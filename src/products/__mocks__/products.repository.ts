@@ -8,4 +8,5 @@ export const ProductsRepository = jest.fn().mockReturnValue({
     findOne: jest.fn().mockResolvedValue(fakeProduct()),
     find: jest.fn().mockResolvedValue([fakeProduct()]),
     softRemove: jest.fn().mockResolvedValue(fakeProduct()),
+    findByFilters: jest.fn().mockResolvedValue([fakeProduct()]),
 })
