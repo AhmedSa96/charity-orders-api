@@ -7,12 +7,11 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { UsersRepository } from './users.repository';
 import { plainToClass } from 'class-transformer';
 import * as bcrypt from 'bcrypt';
+import { Product } from 'src/products/entities/product.entity';
 
 @Injectable()
 export class UsersService {
-  constructor(
-    private readonly usersRepository: UsersRepository,
-  ) {}
+  constructor(private readonly usersRepository: UsersRepository) {}
 
   async findAll(filters: FetchUsersFiltersDto) {
     return await this.usersRepository.findAll(filters);
@@ -66,8 +65,35 @@ export class UsersService {
   }
 
   async findOrdersByUserId(id: number) {
-    const user = await this.usersRepository.findOne({ where: { id }, relations: ['orders'] });
+    const user = await this.usersRepository.findOne({
+      where: { id },
+      relations: ['orders'],
+    });
 
     return user.orders;
+  }
+
+  async addProductToFavorites(userId: number, productId: number) {
+    const user = await this.usersRepository.findOne({
+      where: { id: userId },
+      relations: ['favorate'],
+    });
+
+    const product = await this.usersRepository.createQueryBuilder()
+      .select('product')
+      .from('product', 'product')
+      .where('product.id = :id', { id: productId })
+      .getOne() as Product;
+
+    console.log({user, product});
+    if (!product) {
+      throw new NotFoundException("Product not found");
+    }
+
+    user.favorate.push(product);
+
+    await this.usersRepository.save(user);
+
+    return user;
   }
 }

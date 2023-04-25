@@ -81,4 +81,16 @@ export class UsersController {
   ): Promise<UserResource> {
     return await this.usersService.delete(id);
   }
+
+  @UseGuards(JwtAuthGuard)
+  @Post("favorite/:productId")
+  @ApiBearerAuth()
+  @ApiOkResponse({ type: UserResource })
+  @ApiUnauthorizedResponse({ description: 'Unauthorized' })
+  async addFavorite(
+    @Param("productId") productId: number,
+    @User() user: CurrentAuthUser,
+  ) {
+    return await this.usersService.addProductToFavorites(user.id, productId);
+  }
 }
